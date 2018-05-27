@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+  "strings"
   "os"
   "net/url"
 
@@ -39,18 +40,24 @@ func runContainer(w http.ResponseWriter, r *http.Request) {
   }
   image := m["base"]
 
-  runOutput, runErr := exec.Command("docker", "run", "-itd", "-P", image[0]).Output()
+  // Execute docker run
+  runOut, runErr := exec.Command("docker", "run", "-itd", "-P", image[0]).Output()
 	if runErr != nil {
 		panic(runErr)
 	}
-  fmt.Printf("RUNoutput: %s", runOutput)
 
-  portOutput, portErr := exec.Command("docker", "port", string(runOutput)).Output()
+  // Capture the hash and trim of trailing new line from output.
+  imageId := strings.TrimSpace(string(runOut))
+
+  // Get the port number
+  portOut, portErr := exec.Command("docker", "port", imageId).Output()
   if portErr != nil {
-    log.Fatal(portErr)
+    panic(portErr)
   }
-  fmt.Printf("PORToutput: %s", portOutput)
-  json.NewEncoder(w).Encode("Port _____")
+
+  portNumberBytes := portOut[len(portOut)-6:]
+  portNumber := strings.TrimSpace(string(portNumberBytes))
+  json.NewEncoder(w).Encode(portNumber)
 }
 
 type Response struct {

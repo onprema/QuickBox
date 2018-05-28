@@ -3,11 +3,13 @@
 Frontend web application for containers on demand.
 '''
 from flask import Flask, render_template, url_for
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 host, port = '0.0.0.0', 5000
+cors = CORS(app, resources={r'/api/v1/*': {'origins': '*'}})
 
 
 @app.route('/')

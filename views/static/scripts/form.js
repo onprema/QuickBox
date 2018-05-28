@@ -12,10 +12,19 @@ $(document).ready(function () {
 
   // Make a GET request to check API status
   $('button#status-check').click(function () {
-    let url = 'http://0.0.0.0:5001/api/v1/status'
-    $.get(url, function (data, status) {
-      console.log(data)
+    let url = '/api/v1/status'
+	$.get(url, function(data, status) {
+		console.log(data, status)
+	})
+/*
+    $.ajax({
+      url: url,
+      type: GET,
+      headers: {'Access-Control-Request-Headers': '*'},
+      success: function (data) {
+      	console.log(data);
     })
+*/
   })
 
   // Make a POST request to send container specs to API
@@ -26,7 +35,7 @@ $(document).ready(function () {
       let val = containerSpecs[key];
       query += key + '=' + val
     }
-    let url = 'http://0.0.0.0:5001/api/v1/start/' + query
+    let url = '/api/v1/start/' + query
     $.get(url, function (data, status) {
       console.log(data)
     })

@@ -16,16 +16,7 @@ $(document).ready(function () {
 	$.get(url, function(data, status) {
 		console.log(data, status)
 	})
-/*
-    $.ajax({
-      url: url,
-      type: GET,
-      headers: {'Access-Control-Request-Headers': '*'},
-      success: function (data) {
-      	console.log(data);
-    })
-*/
-  })
+ })
 
   // Make a POST request to send container specs to API
   $('input#start').click(function (event) {

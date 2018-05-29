@@ -4,7 +4,8 @@
     <title>Containers on Demand</title>
     <link href="../static/styles/main.css" rel="stylesheet" type="text/css">
     <script src="../static/scripts/jquery-3.3.1.min.js"></script>
-    <script src="../static/scripts/form.js"></script>
+    <script src="../static/scripts/status.js"></script>
+    <script src="../static/scripts/container.js"></script>
   </head>
   <body>
     <p>Select a container:</p>
@@ -22,6 +23,13 @@
       <br>
       <input type="submit" id="start" value="Start">
     </form>
+
+    <div class="running-containers">
+      <h2>Your Containers</h2>
+      <ul id="running-containers">
+      </ul>
+    </div>
+
     <button type="button" id="status-check">Check API</button>
   </body>
 </html>

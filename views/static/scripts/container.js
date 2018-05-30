@@ -1,11 +1,12 @@
+let containerSpecs = {};
+let cloneURL = ''
 
 $(document).ready(function () {
 
   let containerHash = ''
-  let containerSpecs = {};
 
   // Collect the base image for the container to be ran (required)
-  $("input#c-base").on('click', function () {
+  $("input#base").on('click', function () {
     if ($(this).prop('checked')) {
       containerSpecs[$(this).attr('data-key')] = $(this).attr('data-val')
     } else {
@@ -22,25 +23,33 @@ $(document).ready(function () {
       query += key + '=' + val + '&'
     }
     let url = '/api/v1/start/' + query
+    console.log('URL: ', url)
     $.get(url, function (data, status) {
-      data = JSON.parse(data)
+
+      data = JSON.parse(data) // {'Id': 'adf9a8dc09', 'Port': '23435'}
+      console.log(data)
+      port = data.Port
       containerId = data.Id
       containerHash = data.Id
+
       if (data.Id) {
-        $("ul#running-containers").append(
-          '<li id="' + containerId + '">' + String(data.Id) + 
-          '<button id="' + containerId + '">Destroy</button>' + '</li>')
-        let removeButton = 'button#' + containerHash
-        console.log('removeButton: ', removeButton)
-        $(removeButton).click(function (event) {
+
+        displaySwitch(data);
+
+        // When user clicks Destroy
+        $('button#destroy').click(function (event) {
           event.preventDefault()
-          console.log('Removing container: ', containerHash.slice(8))
-          let url = '/api/v1/remove/' + containerHash
+
+          // Send containerHash to API to remove container
+          removeURL = '/api/v1/remove/' + containerHash
           let containerDisplay = 'li#' + containerHash
-          $.get(url, function (data, status) {
-            console.log(status)
+          $.get(removeURL, function (data, status) {
+            console.log('DESTROY: ', status)
             $(containerDisplay).remove()
           })
+
+          // Hide the running containers div
+          $('.running-container').css('display', 'none')
         })
       }
     })

@@ -6,27 +6,28 @@
     <script src="../static/scripts/jquery-3.3.1.min.js"></script>
     <script src="../static/scripts/status.js"></script>
     <script src="../static/scripts/container.js"></script>
+    <script src="../static/scripts/repo.js"></script>
+    <script src="../static/scripts/display.js"></script>
   </head>
   <body>
+    <div id="select-container">
     <p>Select a container:</p>
     <form>
-      <input type="radio" name="c-base" id="c-base" data-key="base"
-      data-val="ubuntu-with-sshd:1">
+      <input type="radio" name="base" id="base" data-key="base" data-val="cod-ubuntu:14.04">
       Ubuntu:14.04<br>
-      <input type="radio" name="c-base" id="c-base" data-key="base" data-val="centos:6">
+      <input type="radio" name="base" id="base" data-key="base" data-val="cod-centos:6">
       CentOS:6<br>
-      <input type="radio" name="c-base" id="c-base" data-key="base" data-val="alpine:3.7">
-      Alpine:3.7<br>
       <label for="github-repo">GitHub Repo: </label>
       <input type="text" name="repo" id="repo-input">
       <button type="submit" id="repo">Import</button>
       <br>
       <input type="submit" id="start" value="Start">
     </form>
+    </div>
 
-    <div class="running-containers">
-      <h2>Your Containers</h2>
-      <ul id="running-containers">
+    <div class="running-container">
+      <h2>Your Container</h2>
+      <ul id="running-container">
       </ul>
     </div>
 

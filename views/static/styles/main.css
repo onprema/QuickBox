@@ -1,3 +1,7 @@
 p {
   color: blue;
 }
+
+.running-container {
+  display: none;
+}

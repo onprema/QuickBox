@@ -1,9 +1,9 @@
 $(document).ready(function () {
-
+  
   // Get GitHub repo (optional)
   $('button#repo').on('click', function () {
     event.preventDefault();
-    let val = $('#repo-input').val()
+    let val = $('input#repo-input').val()
     let len = 'https://github.com/'.length
     let repo = val.slice(len)
     let url = 'https://api.github.com/repos/' + repo
@@ -11,15 +11,12 @@ $(document).ready(function () {
       type: 'GET',
       url: url,
       success: function (data) {
-        console.log('success', data)
+        cloneURL = data.clone_url
+        // Replacing '/' with '|' to pass as url query string
+        containerSpecs['cloneURL'] = cloneURL.replace(/\//g, '|')
+        containerSpecs['name'] = data.name.toLowerCase()
+        console.log('FROM GITHUB API: ', data)
       }
     })
-
-    // Parse repo URL to remove slashes
-    val = val.split('/')
-    val = val.slice(3)
-    val = val.join(':')
-    containerSpecs['repo'] = val
 	})
-
 })

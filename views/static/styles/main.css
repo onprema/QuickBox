@@ -5,3 +5,7 @@ p {
 .running-container {
   display: none;
 }
+
+.select-container {
+  display: block;
+}

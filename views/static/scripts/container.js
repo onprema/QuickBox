@@ -44,8 +44,9 @@ $(document).ready(function () {
           removeURL = '/api/v1/remove/' + containerHash
           let containerDisplay = 'li#' + containerHash
           $.get(removeURL, function (data, status) {
-            console.log('DESTROY: ', status)
+            console.log('destroy', status)
             $(containerDisplay).remove()
+            $('.select-container').css('display', 'block')
           })
 
           // Hide the running containers div

@@ -26,11 +26,10 @@ $(document).ready(function () {
     console.log('URL: ', url)
     $.get(url, function (data, status) {
 
-      data = JSON.parse(data) // {'Id': 'adf9a8dc09', 'Port': '23435'}
-      console.log(data)
+      data = JSON.parse(data) // {'Id': 'adf9a8dc09', 'Port': '23435', Name: repoName}
+      console.log('Container data: ', data)
       port = data.Port
       containerId = data.Id
-      containerHash = data.Id
 
       if (data.Id) {
 
@@ -39,10 +38,13 @@ $(document).ready(function () {
         // When user clicks Destroy
         $('button#destroy').click(function (event) {
           event.preventDefault()
-
-          // Send containerHash to API to remove container
-          removeURL = '/api/v1/remove/' + containerHash
-          let containerDisplay = 'li#' + containerHash
+          let query = '';
+          for (let key in containerSpecs) {
+            let val = containerSpecs[key];
+            query += key + '=' + val + '&'
+          }
+          removeURL = '/api/v1/remove/' + containerId
+          let containerDisplay = 'li#' + containerId
           $.get(removeURL, function (data, status) {
             console.log('destroy', status)
             $(containerDisplay).remove()

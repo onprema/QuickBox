@@ -10,5 +10,4 @@ function displaySwitch (data) {
   $("ul#running-container").append(
     '<li id="' + containerId + '">' + String(data.Id) + 
     '<button id="destroy">Destroy</button>' + '</li>')
-
 }

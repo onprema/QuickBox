@@ -20,6 +20,7 @@ func main() {
 		router.HandleFunc("/api/v1/status", statusCheck).Methods("GET")
 		router.HandleFunc("/api/v1/start/{specs}", runContainer).Methods("GET")
     router.HandleFunc("/api/v1/remove/{id}", removeContainer).Methods("GET")
+    router.HandleFunc("/api/v1/jobs/{id}", createJob).Methods("GET")
 
 		// For CORS
 		headersOk := handlers.AllowedHeaders([]string{"Authorization"})
@@ -32,6 +33,7 @@ func main() {
 			handlers.LoggingHandler(os.Stdout, http.DefaultServeMux))
 	}
 }
+
 
 func removeContainer(w http.ResponseWriter, r *http.Request) {
 
@@ -73,10 +75,11 @@ func runContainer(w http.ResponseWriter, r *http.Request) {
 	if specs["cloneURL"] != nil {
 
     repoName := string(specs["name"][0])
+    imageName = repoName
     cloneURL := specs["cloneURL"][0]
-    path := makeDockerfile(base, cloneURL)
-    imageName = buildImage(path, repoName)
-    deadImage = imageName
+    path := makeDockerfile(base, cloneURL, repoName)
+    buildImage(path, repoName)
+    deadImage = imageName // deadImage is located in files.go
 
   } else {
 
@@ -86,7 +89,7 @@ func runContainer(w http.ResponseWriter, r *http.Request) {
   }
 
 	// Execute docker run ...
-	fmt.Printf("EXEC: docker run -itdP %s\n", imageName)
+	fmt.Printf("EXEC: docker run -itdP [%s]\n", imageName)
 	runOut, runErr := exec.Command("docker", "run", "-itdP", imageName).Output()
 	if runErr != nil {
 		panic(runErr)

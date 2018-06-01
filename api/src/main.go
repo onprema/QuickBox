@@ -9,6 +9,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
+	//  "sync"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -19,8 +21,7 @@ func main() {
 		var router = mux.NewRouter()
 		router.HandleFunc("/api/v1/status", statusCheck).Methods("GET")
 		router.HandleFunc("/api/v1/start/{specs}", runContainer).Methods("GET")
-    router.HandleFunc("/api/v1/remove/{id}", removeContainer).Methods("GET")
-    router.HandleFunc("/api/v1/jobs/{id}", createJob).Methods("GET")
+		router.HandleFunc("/api/v1/remove/{id}", removeContainer).Methods("GET")
 
 		// For CORS
 		headersOk := handlers.AllowedHeaders([]string{"Authorization"})
@@ -34,63 +35,76 @@ func main() {
 	}
 }
 
+type Builder struct {
+	specs url.Values
+	//  mux sync.Mutex
+	waiting bool
+}
 
-func removeContainer(w http.ResponseWriter, r *http.Request) {
+func (b *Builder) buildImage(path string, repoId string) {
 
-	// Parse the query string to create the specs key/values
-	query := mux.Vars(r)["id"]
-  id := string(query)
+	// Parsing ../../builds/ubuntu/tmp to ../../builds/ubuntu
+	// Because we need to send the context dir to `docker build`
+	pathSplit := strings.Split(path, "/")
+	pathShort := pathSplit[:len(pathSplit)-1]
+	pathContext := strings.Join(pathShort, "/")
 
-	// Remove the container
-	fmt.Printf("EXEC: docker rm -f %s\n", id)
-	_, err := exec.Command("docker", "rm", "-f", id).Output()
+	log.Printf("EXEC: docker build -t [%s] -f [%s] [%s]\n", repoId, path, pathContext)
+	cmd := exec.Command("docker", "build", "-t", repoId, "-f", path, pathContext)
+	err := cmd.Start()
 	if err != nil {
 		panic(err)
 	}
-
-	// Remove the temporary image if there is one
-  if deadImage != "" {
-    fmt.Printf("EXEC: docker image rm -f %s\n", deadImage)
-    out, err := exec.Command("docker", "image", "rm", "-f", deadImage).Output()
-    if err != nil {
-      panic(err)
-    }
-    fmt.Printf("image rm out: %s\n", out)
-  }
-	json.NewEncoder(w).Encode("OK")
+	log.Printf("Waiting for build to finish...\n")
+	b.waiting = true
+	go func() {
+		for b.waiting {
+			log.Printf("%v is building...\n", b.specs["name"])
+			time.Sleep(time.Second * 3)
+		}
+	}()
+	err = cmd.Wait()
+	b.waiting = false
+	log.Printf("Command finished with error: %v\n", err)
 }
 
 func runContainer(w http.ResponseWriter, r *http.Request) {
 
-	// Parse the query string to create the specs key/values
+	// Parse the query string to create the specs key/values}
 	query := mux.Vars(r)["specs"]
 	specs, err := url.ParseQuery(query)
 	if err != nil {
 		panic(err)
 	}
-  base := string(specs["base"][0])
+
+	builder := Builder{specs: specs}
+	base := string(specs["base"][0])
 
 	// If user entered a github repo...
-  var imageName string
-	if specs["cloneURL"] != nil {
+	var image string
+	if specs["id"] != nil {
 
-    repoName := string(specs["name"][0])
-    imageName = repoName
-    cloneURL := specs["cloneURL"][0]
-    path := makeDockerfile(base, cloneURL, repoName)
-    buildImage(path, repoName)
-    deadImage = imageName // deadImage is located in files.go
+		/*
+		   builder.mux.Lock()
+		   defer builder.mux.Unlock()
+		*/
+		repoId := string(specs["id"][0])
+		image = repoId
+		cloneURL := specs["cloneURL"][0]
+		path := makeDockerfile(base, cloneURL, repoId)
+		builder.buildImage(path, repoId)
+		deadImage = image // deadImage is located in files.go. needed for clean
 
-  } else {
+	} else {
 
-    // Use the default image
-    imageName = string(specs["base"][0])
+		// Use the default image
+		image = string(specs["base"][0])
 
-  }
+	}
 
 	// Execute docker run ...
-	fmt.Printf("EXEC: docker run -itdP [%s]\n", imageName)
-	runOut, runErr := exec.Command("docker", "run", "-itdP", imageName).Output()
+	log.Printf("EXEC: docker run -itdP [%s]\n", image)
+	runOut, runErr := exec.Command("docker", "run", "-itdP", image).Output()
 	if runErr != nil {
 		panic(runErr)
 	}
@@ -99,7 +113,7 @@ func runContainer(w http.ResponseWriter, r *http.Request) {
 	containerId := strings.TrimSpace(string(runOut))
 
 	// Get the port number of the container's hash
-	fmt.Printf("EXEC: docker port [%s]\n", containerId)
+	log.Printf("EXEC: docker port [%s]\n", containerId)
 	portOut, portErr := exec.Command("docker", "port", containerId).Output()
 	if portErr != nil {
 		panic(portErr)
@@ -107,18 +121,45 @@ func runContainer(w http.ResponseWriter, r *http.Request) {
 	portNumberBytes := portOut[len(portOut)-6:]
 	portNumber := strings.TrimSpace(string(portNumberBytes))
 
+	// Representation of the running container
 	type Container struct {
-		Id   string
-		Port string
-    Name string
+		Id         string
+		Port       string
+		Name       string
+		Dockerfile string
 	}
-  container := Container{Id: containerId, Port: portNumber, Name: imageName}
+	container := Container{Id: containerId, Port: portNumber, Name: image, Dockerfile: image}
 
 	// Send container data back to the frontend
 	json.NewEncoder(w).Encode(container)
 }
 
+func removeContainer(w http.ResponseWriter, r *http.Request) {
+
+	// Parse the query string to create the specs key/values
+	query := mux.Vars(r)["id"]
+	id := string(query)
+
+	// Remove the container
+	log.Printf("EXEC: docker rm -f %s\n", id)
+	_, err := exec.Command("docker", "rm", "-f", id).Output()
+	if err != nil {
+		panic(err)
+	}
+
+	// Remove the temporary image if there is one
+	if deadImage != "" {
+		log.Printf("deadImage: [%s]\n", deadImage)
+		log.Printf("EXEC: docker image rm -f %s\n", deadImage)
+		_, err := exec.Command("docker", "image", "rm", "-f", deadImage).Output()
+		if err != nil {
+			panic(err)
+		}
+		deadImage = ""
+	}
+	json.NewEncoder(w).Encode("OK")
+}
+
 func statusCheck(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("OK")
-	log.Print(w)
 }

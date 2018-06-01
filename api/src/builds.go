@@ -1,34 +1,39 @@
 package main
 
+/*
+
 import (
-  "fmt"
-  "os"
-  "bytes"
-  "io/ioutil"
+  //"fmt"
+//  "os"
+ // "bytes"
+ // "io/ioutil"
   "strings"
   "os/exec"
-  "sync"
-  "net/http"
+ // "sync"
+ // "net/http"
+ "log"
 )
 
-func buildImage(path string, repoName string) {
+func buildImage(path string, repoId string) {
 
   // Parsing ../../builds/ubuntu/tmp to ../../builds/ubuntu
+  // Because we need to send the context dir to `docker build`
   pathSplit := strings.Split(path, "/")
   pathShort := pathSplit[:len(pathSplit) - 1]
-  context := strings.Join(pathShort, "/")
+  pathContext := strings.Join(pathShort, "/")
 
-  fmt.Printf("EXEC: docker build -t [%s] -f [%s] [%s]\n", repoName, path, context)
-	cmd := exec.Command("docker", "build", "-t", repoName, "-f", path, context)
+  log.Printf("EXEC: docker build -t [%s] -f [%s] [%s]\n", repoId, path, pathContext)
+	cmd := exec.Command("docker", "build", "-t", repoId, "-f", path, pathContext)
   err := cmd.Start()
 	if err != nil {
 		panic(err)
 	}
-  fmt.Println("Waiting for build to finish")
+  log.Printf("Waiting for build to finish\n")
   err = cmd.Wait()
-  fmt.Println("Command finished with error: %v\n", err)
+  log.Printf("Command finished with error: %v\n", err)
 }
 
+/*
 type Build struct {
   mux sync.RWMutex
   cmd *exec.Cmd
@@ -53,7 +58,7 @@ func (server *Server) jobStatus(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) createJob(w http.ResponseWriter, r *http.Request) {
-  build := &Build{cmd: exec.Command("docker", "build", "-t", repoName, "-f", path, context)
+  build := &Build{cmd: exec.Command("docker", "build", "-t", repoId, "-f", path, context)}
   server.mux.Lock()
   id := server.newBuildID()
   server.builds[id] = build
@@ -101,4 +106,4 @@ const (
   Done
   Failed
 )
-
+*/

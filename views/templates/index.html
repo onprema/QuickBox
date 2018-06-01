@@ -11,10 +11,14 @@
     <script src="../static/scripts/display.js"></script>
   </head>
   <body>
+    <div class="loading">Please hold...</div>
+    <div class="destroying"></div>
     <div class="select-container">
-    <p>Select a container:</p>
+    <p>Select a base:</p>
+    <div id="baseFlash">Base required!</div>
     <form>
-      <input type="radio" name="base" id="base" data-key="base" data-val="cod-ubuntu:14.04">
+      <input type="radio" name="base" id="base" data-key="base"
+      data-val="cod-ubuntu:14.04" required>
       Ubuntu:14.04<br>
       <input type="radio" name="base" id="base" data-key="base" data-val="cod-centos:6">
       CentOS:6<br>
@@ -22,6 +26,8 @@
       <input type="text" name="repo" id="repo-input">
       <button type="submit" id="repo">Import</button>
       <br>
+      <div id="repoFlash">Invalid GitHub repository.</div>
+      <div id="repoSuccess">GitHub repository imported. Click 'start'.</div>
       <input type="submit" id="start" value="Start">
     </form>
     </div>
@@ -35,6 +41,6 @@
       </ul>
     </div>
 
-    <button type="button" id="status-check">Check API</button>
+    <button type="button" id="status-check" style="display: none">Check API</button>
   </body>
 </html>

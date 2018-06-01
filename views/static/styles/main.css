@@ -2,7 +2,15 @@ p {
   color: blue;
 }
 
+.destroying {
+  display: block;
+}
+
 .running-container {
+  display: none;
+}
+
+.loading {
   display: none;
 }
 
@@ -12,6 +20,24 @@ p {
 
 .building {
   display: none;
+}
+
+#baseFlash {
+  display: none;
+  background-color: #449bc2;
+  color: #ffffff;
+}
+
+#repoFlash {
+  display: none;
+  background-color: #449bc2;
+  color: #ffffff;
+}
+
+#repoSuccess {
+  display: none;
+  background-color: darkgreen;
+  color: #ffffff;
 }
 
 #loader {

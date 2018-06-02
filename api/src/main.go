@@ -10,7 +10,7 @@ import (
 	"os/exec"
 	"strings"
 	"time"
-	//  "sync"
+	  "sync"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -37,7 +37,7 @@ func main() {
 
 type Builder struct {
 	specs url.Values
-	//  mux sync.Mutex
+	  mux sync.Mutex
 	waiting bool
 }
 
@@ -64,7 +64,9 @@ func (b *Builder) buildImage(path string, repoId string) {
 		}
 	}()
 	err = cmd.Wait()
+  b.mux.Lock()
 	b.waiting = false
+  b.mux.Unlock()
 	log.Printf("Command finished with error: %v\n", err)
 }
 
@@ -84,10 +86,8 @@ func runContainer(w http.ResponseWriter, r *http.Request) {
 	var image string
 	if specs["id"] != nil {
 
-		/*
-		   builder.mux.Lock()
-		   defer builder.mux.Unlock()
-		*/
+   builder.mux.Lock()
+   defer builder.mux.Unlock()
 		repoId := string(specs["id"][0])
 		image = repoId
 		cloneURL := specs["cloneURL"][0]

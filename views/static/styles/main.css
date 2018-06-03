@@ -2,6 +2,22 @@ p {
   color: blue;
 }
 
+.os {
+  display: inline-block;
+  max-height: 250px;
+  background: lightblue;
+  border: 1px solid grey;
+}
+
+.github {
+  display: block;
+  width: 100%;
+  max-height: 250px;
+  background: darkgreen;
+  border: 1px solid grey;
+  padding: 10px;
+}
+
 .destroying {
   display: block;
 }
@@ -38,6 +54,32 @@ p {
   display: none;
   background-color: darkgreen;
   color: #ffffff;
+}
+
+#userFlash {
+  display: none;
+}
+
+#keyMsgFailure {
+  display: none;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+}
+
+#keyMsgSuccess {
+  display: none;
+}
+
+#userSuccess {
+  display: none;
+  color: #000000;
+}
+
+#username {
+  color: green;
 }
 
 #loader {

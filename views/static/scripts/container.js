@@ -1,3 +1,4 @@
+
 let containerSpecs = {};
 let cloneURL = ''
 
@@ -6,6 +7,29 @@ function checkBuild() {
   let out = $.ajax({type: 'GET', url: checkURL, async: false}).responseText
   console.log(out)
   setTimeout(checkBuild, 1000)
+}
+function verifyKey() {
+
+  // Collect the user's public key
+  let key = $("textarea#pk").val();
+
+  let registerURL = '/api/v1/register'
+  $.ajax({
+    method: "POST",
+    url: registerURL,
+    data: {
+      'username': 'theo',
+      'password': 123,
+      'key': key,
+    },
+    headers: {
+      'it_is': 'you\'re boy',
+    }
+    .done(function(msg) {
+      console.log(msg)
+    })
+  })
+  console.log(registerURL)
 }
 
 $(document).ready(function () {
@@ -21,8 +45,10 @@ $(document).ready(function () {
     }
   })
 
+
   // Make a GET request to send container specs to API
   $('input#start').click(function (event) {
+    verifyKey();
     event.preventDefault();
     let query = '';
     if ($('input#base').prop('checked') == false) {
@@ -31,7 +57,7 @@ $(document).ready(function () {
       })
     } else {
       $('.select-container').hide()
-      $('.loading').show()
+      $('#loader').show()
       for (let key in containerSpecs) {
         let val = containerSpecs[key];
         query += key + '=' + val + '&'
@@ -53,12 +79,12 @@ $(document).ready(function () {
           // When user clicks Destroy
           $('button#destroy').click(function (event) {
             event.preventDefault()
-            $('.destroying').html('Destroying container ' + containerId)
+            $('#loader').show()
             removeURL = '/api/v1/remove/' + containerId
             $.get(removeURL, function (data, status) {
               console.log('destroy', status)
             })
-            $('.destroying').hide()
+            $('#loader').hide()
             location.reload()
           })
         }

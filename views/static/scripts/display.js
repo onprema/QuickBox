@@ -1,16 +1,13 @@
 function displaySwitch (data) {
 
   // Hide loading section
-  $('.loading').hide()
+  $('#loader').hide()
 
   // Display the running container after clicking 'start'
   $('.running-container').show()
 
-  // Display container ID and Destroy button after clicking 'start'
+  // Display Port and Destroy button after clicking 'start'
   $("ul#running-container").append(
-    '<li>' + 'id: ' + String(data.Id) + '</li>' +
-    '<li>' + 'port: ' + String(data.Port) + '</li>' +
-    '<li>' + 'file: ' + String(data.Dockerfile) + '</li>' +
-    '<li>' + 'name: ' + String(data.Name) + '</li>' +
+    '<li>' +'ssh root@mydomain.com -p ' + String(data.Port) + '</li>' +
     '<button id="destroy">Destroy</button>')
 }

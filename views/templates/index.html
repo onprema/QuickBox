@@ -9,28 +9,103 @@
     <script src="../static/scripts/container.js"></script>
     <script src="../static/scripts/repo.js"></script>
     <script src="../static/scripts/display.js"></script>
+    <script src="../static/scripts/register.js"></script>
   </head>
   <body>
-    <div class="loading">Please hold...</div>
-    <div class="destroying"></div>
-    <div class="select-container">
-    <p>Select a base:</p>
-    <div id="baseFlash">Base required!</div>
-    <form>
-      <input type="radio" name="base" id="base" data-key="base"
-      data-val="cod-ubuntu:14.04" required>
-      Ubuntu:14.04<br>
-      <input type="radio" name="base" id="base" data-key="base" data-val="cod-centos:6">
-      CentOS:6<br>
-      <label for="github-repo">GitHub Repo: </label>
-      <input type="text" name="repo" id="repo-input">
-      <button type="submit" id="repo">Import</button>
-      <br>
-      <div id="repoFlash">Invalid GitHub repository.</div>
-      <div id="repoSuccess">GitHub repository imported. Click 'start'.</div>
-      <input type="submit" id="start" value="Start">
+    <div class="header">
+      <h1>Container on Demand</h1>
+    </div>
+
+    <div class="register">
+      <form id="registration">
+        <p>To get started, enter your GitHub username or Public Key</p>.
+        <div class="username">
+        username: <input type="text" name="username" id="username" data-key="username">
+        <button type="button" id="username" value="Submit">Submit</button>
+        </div>
+        <br>
+        </div>
+        <!--
+        <div class="pk">
+        <label for="pk">Public Key: </label>
+        <textarea rows="5" cols="50" name="pk" id="pk" required></textarea>
+        <button type="submit" id="pk">Add Key</button>
+        <br>
+        </div>
+        -->
+      </form>
+    </div>
+    <div id="userFlash">Invalid GitHub username.</div>
+    <div id="userSuccess">Welcome, <span id="username"></span>!</div>
+    <div id="keyMsgSuccess"><p>It looks like you have the following public key(s)
+      linked to your GitHub account:</p>
+      <textarea rows="4" cols="50" id="keySuccess"></textarea>
+      <p>Would you like to use them for Containers on Demand?</p>
+    <form id="keyConfirm">
+    <button type="button" id="keyConfirmYes">Yes</button>
+    <input type="radio" name="keyConfirm" id="keyConfirmNo">No, I'll add a new
+    key:</input><br>
+    <form id="customKey">
+      <label for="customKey">
+      <textarea rows="5" cols="50" name="customKey" id="customKey" required></textarea>
+      </label><br>
+      <button type="submit" id="customKey">Add Key</button>
+      <div id="badCustomKeyFlash" style="color: red"></div>
     </form>
     </div>
+      <div id="keyConfirm"></div>
+    <div id="keyMsgFailure">It looks like you have not linked a public key to
+      your GitHub account. This service requires a valid SSH key. Please enter
+      your SSH key: (<a href="#">help</a>)
+      <form id="pubkey">
+        <label for="pk">
+        <textarea rows="5" cols="50" name="pk" id="pk" required></textarea>
+        </label>
+        <button type="submit" id="pk">Add Key</button>
+        <div id="badKeyFlash" style="color: red"></div>
+      </form>
+    </div>
+      <div id="keySuccess" style="color: green"></div>
+      <div id="creds"></div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div class="service">
+      <div id="loader"></div>
+      <div class="destroying"></div>
+      <div class="select-container">
+      <p>OS:</p>
+      <div id="baseFlash">Please select a base.</div>
+      <form id="input">
+        <div class="os">
+        <input type="radio" name="base" id="base" data-key="base"
+        data-val="cod-ubuntu:14.04" required>
+        Ubuntu:14.04<br>
+        </div>
+        <div class="os">
+        <input type="radio" name="base" id="base" data-key="base" data-val="cod-centos:6">
+        CentOS:6<br>
+        </div>
+        <div class="github">
+        <label for="github-repo">GitHub Repo: </label>
+        <input type="text" name="repo" id="repo-input">
+        <button type="submit" id="repo">Import</button>
+        <br>
+        </div>
+        <div id="repoFlash">Invalid GitHub repository.</div>
+        <div id="repoSuccess">GitHub repository imported. Click 'start'.</div>
+        <input type="submit" id="start" value="Start">
+      </form>
+      </div>
+      </div>
 
     <div class="building", id="loader">
     </div>
@@ -42,5 +117,8 @@
     </div>
 
     <button type="button" id="status-check" style="display: none">Check API</button>
+    <div class="footer">
+      <p>footer.</p>
+    </div>
   </body>
 </html>

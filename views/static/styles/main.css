@@ -64,9 +64,14 @@ p {
   display: none;
 }
 
-footer {
-  position: absolute;
+.service {
+  display: none;
+}
+
+#footer {
+  position: fixed;
   bottom: 0;
+  left: 0;
 }
 
 #keyMsgSuccess {

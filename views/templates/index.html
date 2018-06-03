@@ -10,29 +10,25 @@
     <script src="../static/scripts/repo.js"></script>
     <script src="../static/scripts/display.js"></script>
     <script src="../static/scripts/register.js"></script>
+    <script src="../static/scripts/functions.js"></script>
   </head>
   <body>
     <div class="header">
       <h1>Container on Demand</h1>
     </div>
 
+    <!-- REGISTRATION  -->
+
     <div class="register">
       <form id="registration">
-        <p>To get started, enter your GitHub username or Public Key</p>.
+        <p>To get started, enter your GitHub username. Don't have a GitHub
+        account? <a href="#">Click here.</a></p>
         <div class="username">
         username: <input type="text" name="username" id="username" data-key="username">
         <button type="button" id="username" value="Submit">Submit</button>
         </div>
         <br>
         </div>
-        <!--
-        <div class="pk">
-        <label for="pk">Public Key: </label>
-        <textarea rows="5" cols="50" name="pk" id="pk" required></textarea>
-        <button type="submit" id="pk">Add Key</button>
-        <br>
-        </div>
-        -->
       </form>
     </div>
     <div id="userFlash">Invalid GitHub username.</div>
@@ -43,8 +39,8 @@
       <p>Would you like to use them for Containers on Demand?</p>
     <form id="keyConfirm">
     <button type="button" id="keyConfirmYes">Yes</button>
-    <input type="radio" name="keyConfirm" id="keyConfirmNo">No, I'll add a new
-    key:</input><br>
+    <button type="button" id="keyConfirmNo">No, I'll add a new key</button>
+    <br>
     <form id="customKey">
       <label for="customKey">
       <textarea rows="5" cols="50" name="customKey" id="customKey" required></textarea>
@@ -69,14 +65,7 @@
       <div id="creds"></div>
     </div>
 
-
-
-
-
-
-
-
-
+    <!-- SERVICE  -->
 
     <div class="service">
       <div id="loader"></div>
@@ -116,8 +105,9 @@
       </ul>
     </div>
 
-    <button type="button" id="status-check" style="display: none">Check API</button>
-    <div class="footer">
+    <!-- FOOTER -->
+
+    <div id="footer">
       <p>footer.</p>
     </div>
   </body>

@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+  "bytes"
 	"log"
 	"net/http"
 	"net/url"
@@ -22,6 +23,7 @@ func main() {
 		router.HandleFunc("/api/v1/status", statusCheck).Methods("GET")
 		router.HandleFunc("/api/v1/start/{specs}", runContainer).Methods("GET")
 		router.HandleFunc("/api/v1/remove/{id}", removeContainer).Methods("GET")
+    router.HandleFunc("/api/v1/register", addKey).Methods("GET")
 
 		// For CORS
 		headersOk := handlers.AllowedHeaders([]string{"Authorization"})
@@ -161,5 +163,39 @@ func removeContainer(w http.ResponseWriter, r *http.Request) {
 }
 
 func statusCheck(w http.ResponseWriter, r *http.Request) {
+  log.Printf("Status called.")
+	json.NewEncoder(w).Encode("OK")
+}
+
+type User struct {
+  username string `json:username`
+  key []string `json:keys`
+}
+
+// Gets user's private key from HTTP header and adds it to authorized_keys
+func addKey(w http.ResponseWriter, r *http.Request) {
+
+  key := strings.Replace(r.Header["Creds"][0], "\"[]", "", -1)
+  key = strings.Replace(key, "\"", "", -1)
+  key = strings.Replace(key, ",", "\n", -1)
+  key = strings.Trim(key, "[]")
+  key = strings.Trim(key, "\"")
+
+  path := "/home/theo/.ssh/authorized_keys"
+  authorizedKeys, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+  if err != nil {
+    log.Printf("Failed to open %s\n", path)
+  }
+
+  var keyString bytes.Buffer
+  keyString.WriteString(key + "\n")
+  _, writeErr := authorizedKeys.Write(keyString.Bytes())
+  if writeErr != nil {
+    log.Printf("Failed to write %s to %s\n", keyString.Bytes(), path)
+    log.Print(err)
+  }
+
+  log.Printf("Added key to %s\n", path)
+
 	json.NewEncoder(w).Encode("OK")
 }

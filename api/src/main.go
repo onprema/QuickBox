@@ -181,7 +181,7 @@ func addKey(w http.ResponseWriter, r *http.Request) {
   key = strings.Trim(key, "[]")
   key = strings.Trim(key, "\"")
 
-  path := "/home/root/.ssh/authorized_keys"
+  path := "/root/.ssh/authorized_keys"
   authorizedKeys, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
   if err != nil {
     log.Printf("Failed to open %s\n", path)

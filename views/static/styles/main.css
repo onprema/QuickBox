@@ -1,21 +1,68 @@
 p {
-  color: blue;
+  font-family: 'Tinos', serif;
+  color: #111111;
 }
 
 .os {
-  display: inline-block;
-  max-height: 250px;
-  background: lightblue;
-  border: 1px solid grey;
+  display: flex;
+  width: 420px;
+  border: 1px solid red;
+  padding: 20px;
 }
 
 .github {
   display: block;
   width: 100%;
   max-height: 250px;
-  background: darkgreen;
-  border: 1px solid grey;
+  padding: 15px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: auto;
+  padding: 0;
+  border: 1px solid pink;
+  align-items: center;
+}
+
+.nav {
+  text-align: center;
+}
+
+.nav ul {
+  list-style-type: none;
+  margin: auto;
+  text-align: center;
+}
+
+.nav li {
+  margin-right: 10px;
+  margin-left: 10px;
+  display: inline;
+}
+
+.message {
+  font-family: 'Tinos', serif;
+  font-size: 1.15em;
+  margin: 0;
+}
+
+.register {
   padding: 10px;
+  text-align: center;
+}
+
+.header {
+  text-align: center;
+  font-family: 'Tinos', serif;
+}
+
+.header a {
+  text-decoration: none;
+  color: #000000;
+  text-shadow: 2px 2px #40e0d0;
 }
 
 .destroying {
@@ -60,7 +107,7 @@ p {
   display: none;
 }
 
-#keyMsgFailure {
+#keyMsg {
   display: none;
 }
 
@@ -84,7 +131,7 @@ p {
 }
 
 #username {
-  color: green;
+  color: #000000;
 }
 
 #loader {

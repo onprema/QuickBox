@@ -39,7 +39,7 @@ func main() {
 
 type Builder struct {
 	specs url.Values
-	  mux sync.Mutex
+	  mux sync.RWMutex
 	waiting bool
 }
 
@@ -66,9 +66,9 @@ func (b *Builder) buildImage(path string, repoId string) {
 		}
 	}()
 	err = cmd.Wait()
-  b.mux.Lock()
+  //b.mux.RLock()
 	b.waiting = false
-  b.mux.Unlock()
+  //b.mux.Unlock()
 	log.Printf("Command finished with error: %v\n", err)
 }
 

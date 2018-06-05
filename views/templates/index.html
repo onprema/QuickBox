@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Containers on Demand</title>
     <link href="../static/styles/main.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Tinos" rel="stylesheet">
     <script src="../static/scripts/jquery-3.3.1.min.js"></script>
     <script src="../static/scripts/status.js"></script>
     <script src="../static/scripts/container.js"></script>
@@ -11,36 +12,37 @@
     <script src="../static/scripts/display.js"></script>
     <script src="../static/scripts/register.js"></script>
     <script src="../static/scripts/functions.js"></script>
+    <script src="../static/scripts/cookie.js"></script>
   </head>
   <body>
+    <div class="container">
     <div class="header">
-      <h1>Container on Demand</h1>
+      <h1><a href="/">Container on Demand</a></h1>
+      <div class="message">
+        <p>Spin up an isolated Linux environment in seconds.</p>
+      </div>
     </div>
 
     <!-- REGISTRATION  -->
 
     <div class="register">
       <form id="registration">
-        <p>To get started, enter your GitHub username. Don't have a GitHub
-        account? <a href="#">Click here.</a></p>
-        <div class="username">
-        username: <input type="text" name="username" id="username" data-key="username">
-        <button type="button" id="username" value="Submit">Submit</button>
-        </div>
-        <br>
-        </div>
+        <p>To get started, enter your GitHub username.</p>
+        <input type="text" name="username" id="username" data-key="username">
+        <button type="button" id="username" value="Submit">Let's go!</button>
       </form>
     </div>
-    <div id="userFlash">Invalid GitHub username.</div>
-    <div id="userSuccess">Welcome, <span id="username"></span>!</div>
-    <div id="keyMsgSuccess"><p>It looks like you have the following public key(s)
-      linked to your GitHub account:</p>
-      <textarea rows="4" cols="50" id="keySuccess"></textarea>
-      <p>Would you like to use them for Containers on Demand?</p>
+
+
+    <div id="userFlash">Invalid GitHub username. Please try again.</div>
+    <div id="userSuccess">Welcome, <span id="username"></span>!
+      <span id="verified"></span></div>
+    <div id="keyMsgSuccess"><p>It looks like you have an SSH key linked to your
+      GitHub account. Would you like to use it for Container on Demand?</p>
     <form id="keyConfirm">
     <button type="button" id="keyConfirmYes">Yes</button>
-    <button type="button" id="keyConfirmNo">No, I'll add a new key</button>
     <br>
+    <p>Alternatively, you can provide your SSH public key.</p>
     <form id="customKey">
       <label for="customKey">
       <textarea rows="5" cols="50" name="customKey" id="customKey" required></textarea>
@@ -50,16 +52,10 @@
     </form>
     </div>
       <div id="keyConfirm"></div>
-    <div id="keyMsgFailure">It looks like you have not linked a public key to
-      your GitHub account. This service requires a valid SSH key. Please enter
-      your SSH key: (<a href="#">help</a>)
-      <form id="pubkey">
-        <label for="pk">
-        <textarea rows="5" cols="50" name="pk" id="pk" required></textarea>
-        </label>
-        <button type="submit" id="pk">Add Key</button>
-        <div id="badKeyFlash" style="color: red"></div>
-      </form>
+      <div id="keyMsg"><p>It looks like you have not linked an SSH key to
+      your GitHub account. </p><p>Please <a
+         href="https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/">follow
+         these instructions</a> and try again.</p>
     </div>
       <div id="keySuccess" style="color: green"></div>
       <div id="creds"></div>
@@ -71,26 +67,26 @@
       <div id="loader"></div>
       <div class="destroying"></div>
       <div class="select-container">
-      <p>OS:</p>
-      <div id="baseFlash">Please select a base.</div>
+      <p>Select a base image:</p>
+      <div id="baseFlash">Please select a base image.</div>
       <form id="input">
         <div class="os">
         <input type="radio" name="base" id="base" data-key="base"
-        data-val="cod-ubuntu:14.04" required>
-        Ubuntu:14.04<br>
-        </div>
-        <div class="os">
+        data-val="cod-ubuntu:14.04" checked="checked">
+        <div>Ubuntu:14.04</div>
         <input type="radio" name="base" id="base" data-key="base" data-val="cod-centos:6">
         CentOS:6<br>
         </div>
+
         <div class="github">
-        <label for="github-repo">GitHub Repo: </label>
-        <input type="text" name="repo" id="repo-input">
-        <button type="submit" id="repo">Import</button>
+        <p>GitHub Repo:</p>
+        <div id="repoFlash">Invalid GitHub repository.</div>
+        <div id="repoSuccess">GitHub repo added. Click 'start'.</div>
+        <input type="text" name="repo" id="repo-input"
+        value="https://github.com/username/repo" size=50>
+        <button type="submit" id="repo">Add Repo</button>
         <br>
         </div>
-        <div id="repoFlash">Invalid GitHub repository.</div>
-        <div id="repoSuccess">GitHub repository imported. Click 'start'.</div>
         <input type="submit" id="start" value="Start">
       </form>
       </div>
@@ -108,7 +104,14 @@
     <!-- FOOTER -->
 
     <div id="footer">
-      <p>footer.</p>
+      <div class="nav">
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Report a Bug</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
     </div>
   </body>
 </html>

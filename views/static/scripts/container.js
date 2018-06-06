@@ -13,47 +13,60 @@ $(document).ready(function () {
     }
   })
 
+  // Make the default base ubuntu:14.04
+  if (containerSpecs['base'] === undefined) {
+    containerSpecs['base'] = 'cod-ubuntu:14.04'
+  }
 
   // Make a GET request to send container specs to API
   $('input#start').click(function (event) {
     event.preventDefault();
-    let query = '';
-    if ($('input#base').prop('checked') == false) {
-      $('#baseFlash').delay(500).fadeIn('normal', function () {
-        $(this).delay(2500).fadeOut()
-      })
-    } else {
-      $('.select-container').hide()
-      $('#loader').show()
-      for (let key in containerSpecs) {
-        let val = containerSpecs[key];
-        query += key + '=' + val + '&'
-      }
+    $('.select-container').hide()
+    $('.nav').hide()
+    $('#loader').show()
 
-      let url = '/api/v1/start/' + query
-      $.get(url, function (data, status) {
-        data = JSON.parse(data)
-        console.log('Container: ', data)
-        port = data.Port
-        containerId = data.Id
+    // Validate github repo
+    let val = $('input#repo-input').val()
+    if (val !== '') {
+      $('.message p').text('Validating repository...')
+      let len = 'https://github.com/'.length
+      let repo = val.slice(len)
+      let url = 'https://api.github.com/repos/' + repo
+      $.ajax ({
+        type: 'GET',
+        url: url,
+        statusCode: {
 
-        if (data.Id) {
-
-          displaySwitch(data);
-
-          // When user clicks Destroy
-          $('button#destroy').click(function (event) {
-            event.preventDefault()
-            $('#loader').show()
-            removeURL = '/api/v1/remove/' + containerId
-            $.get(removeURL, function (data, status) {
-              console.log('destroy', status)
+          // If repo is not valid...
+          404: function() {
+            $('#repoFlash').delay(500).fadeIn('normal', function() {
+              $('#loader').hide()
+              $('.select-container').show()
             })
-            $('#loader').hide()
-            location.reload()
-          })
+          }
+        },
+
+        // If repo is valid...
+        success: function (data) {
+
+          // Add repo to containerSpecs
+          $('.message p').text('GitHub reposority validated.')
+          cloneURL = data.clone_url
+          // Replacing '/' with '|' to pass as url query string
+          containerSpecs['cloneURL'] = cloneURL.replace(/\//g, '|')
+          containerSpecs['name'] = data.name.toLowerCase()
+          containerSpecs['id'] = String(data.id)
+
+          // Start build...
+          $('.select-container').hide()
+          $('.nav').hide()
+          $('#loader').show()
+          startContainer();
         }
       })
+    } else {
+      startContainer();
     }
+
   })
 })

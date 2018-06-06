@@ -7,19 +7,53 @@ function verifyKey(key) {
   } return 1
 }
 
+
+function startContainer() {
+  $('.message p').text('Building container...')
+  let query = '';
+  for (let key in containerSpecs) {
+    let val = containerSpecs[key];
+    query += key + '=' + val + '&'
+  }
+
+  console.log('[' + query +']')
+  let url = '/api/v1/start/' + query
+  $.get(url, function (data, status) {
+    data = JSON.parse(data)
+    console.log('Container: ', data)
+    port = data.Port
+    containerId = data.Id
+    if (data.Id) {
+      $('.message p').text('Done!')
+      displaySwitch(data);
+      // When user clicks Destroy
+      $('button#destroy').click(function (event) {
+        event.preventDefault()
+        $('#loader').show()
+        removeURL = '/api/v1/remove/' + containerId
+        $.get(removeURL, function (data, status) {
+          console.log('destroying container: ', data)
+        })
+        $('#loader').hide()
+        location.reload()
+      })
+    }
+  })
+}
+
 function verifyGithubUsername() {
-  $('.message p').show()
   let username = $('input#username').val()
   let url = 'https://api.github.com/users/' + username
   // Validate github username
   $('div#loader').show()
+  $('.message p').text('Verifying GitHub username...')
   $.ajax ({
     type: 'GET',
     url: url,
     statusCode: {
       404: function() {
         $('div#loader').hide()
-        $('.message').text('Invalid GitHub username. Please try again')
+        $('.message p').text('Invalid GitHub username. Please try again')
         $('.register').show()
         $('.register p').text('')
       }
@@ -28,10 +62,6 @@ function verifyGithubUsername() {
       // Add username to creds object
       creds['username'] = username;
       $('form#registration').hide()
-      $('span#username').html(username)
-      $('div#userSuccess').delay(200).fadeIn('normal', function() {
-        $(this).show()
-      })
       $('.message p').text('Welcome, ' + username + '!')
     }
   })
@@ -60,6 +90,7 @@ function verifyGithubUsername() {
         $('button#keyConfirmYes').click(function (event) {
           event.preventDefault()
 
+          $('.message p').text('Adding SSH keys to server...')
           // send public key to backend
           let credURL = '/api/v1/register'
           $.ajax ({
@@ -69,6 +100,7 @@ function verifyGithubUsername() {
               creds: JSON.stringify(creds['keys'])
             },
             success: function(data) {
+              $('.message p').text('SSH key added successfully!')
               console.log(data)
             }
           })
@@ -77,23 +109,21 @@ function verifyGithubUsername() {
           $('div#loader').hide()
           $('div#keyMsgSuccess').hide()
           $('.service').show()
+          $('.message p').text('Welcome, ' + username + '!')
 
           // Set cookie?
 					Cookies.set(username, true, { expires: .01 })
           console.log(document.cookie)
-          $('span#verified').text('[verified]')
         })
 
-        // Alternatively, prove an SSH key
+        // Alternatively, provide an SSH key
         $('button#customKey').click( function(event) {
           event.preventDefault()
           let key = $('textarea#customKey').val()
           let result = verifyKey(key);
           if (result != null) {
             $('div#loader').hide()
-            $('div#keySuccess').delay(500).fadeIn('normal', function() {
-              $(this).text('Key added successfully.')
-            })
+            $('.message p').text('SSH key added successfully!')
             creds['keys'] = key
             $('div#keyMsg').hide()
 
@@ -124,7 +154,6 @@ function verifyGithubUsername() {
         $('div#keyMsg').delay(500).fadeIn('normal', function() {
           $('div#loader').hide()
           $(this).show()
-          //setTimeout(location.reload(), 5000)
         })
         }
       }

@@ -23,17 +23,23 @@ p {
   max-width: 800px;
   margin: auto;
   padding: 0;
-  border: 1px solid pink;
   align-items: center;
+  text-align: center;
+}
+
+.bases {
+  width: 420px;
 }
 
 .nav {
+  display: flex;
   text-align: center;
+  padding: 20px;
+  margin-top: 200px;
 }
 
 .nav ul {
   list-style-type: none;
-  margin: auto;
   text-align: center;
 }
 
@@ -65,36 +71,33 @@ p {
   text-shadow: 2px 2px #40e0d0;
 }
 
-.destroying {
-  display: block;
+#start {
+  font-size: 1.5em;
 }
 
 .running-container {
   display: none;
 }
 
-.loading {
-  display: none;
-}
-
 .select-container {
-  display: block;
-}
-
-.building {
-  display: none;
+  text-align: center;
+  padding-bottom: 20px;
 }
 
 #baseFlash {
   display: none;
-  background-color: #449bc2;
-  color: #ffffff;
+  color: #FF0000;
+}
+
+.cmd {
+  background-color: black;
+  color: white;
+  padding: 10px;
 }
 
 #repoFlash {
   display: none;
-  background-color: #449bc2;
-  color: #ffffff;
+  color: #FF0000;
 }
 
 #repoSuccess {
@@ -113,12 +116,6 @@ p {
 
 .service {
   display: none;
-}
-
-#footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
 }
 
 #keyMsgSuccess {

@@ -7,38 +7,33 @@ function verifyKey(key) {
   } return 1
 }
 
+function checkCustomKey(key) {
+  $('div#loader').show()
+  $('.message p').text('Adding SSH key...')
+  let result = verifyKey(key);
+  if (result != null) {
+    creds['keys'] = key
+    $('div#keyMsg').hide()
 
-function startContainer() {
-  $('.message p').text('Building container...')
-  let query = '';
-  for (let key in containerSpecs) {
-    let val = containerSpecs[key];
-    query += key + '=' + val + '&'
+    // send public key to backend
+    let credURL = '/api/v1/register'
+    $.ajax ({
+      type: 'GET',
+      url: credURL,
+      headers: {
+        creds: JSON.stringify(creds['keys'])
+      },
+      success: function(data) {
+        console.log(data)
+      }
+    })
+    $('div#loader').hide()
+    $('.message p').text('SSH key added successfully!')
+    $('div#keyMsgSuccess').hide()
+    $('.service').show()
+  } else {
+    $('.message p').html('<span style="color: red">Invalid SSH key. Please try again</span>')
   }
-
-  console.log('[' + query +']')
-  let url = '/api/v1/start/' + query
-  $.get(url, function (data, status) {
-    data = JSON.parse(data)
-    console.log('Container: ', data)
-    port = data.Port
-    containerId = data.Id
-    if (data.Id) {
-      $('.message p').text('Done!')
-      displaySwitch(data);
-      // When user clicks Destroy
-      $('button#destroy').click(function (event) {
-        event.preventDefault()
-        $('#loader').show()
-        removeURL = '/api/v1/remove/' + containerId
-        $.get(removeURL, function (data, status) {
-          console.log('destroying container: ', data)
-        })
-        $('#loader').hide()
-        location.reload()
-      })
-    }
-  })
 }
 
 function verifyGithubUsername() {
@@ -91,6 +86,7 @@ function verifyGithubUsername() {
           event.preventDefault()
 
           $('.message p').text('Adding SSH keys to server...')
+          
           // send public key to backend
           let credURL = '/api/v1/register'
           $.ajax ({
@@ -111,51 +107,64 @@ function verifyGithubUsername() {
           $('.service').show()
           $('.message p').text('Welcome, ' + username + '!')
 
-          // Set cookie?
-					Cookies.set(username, true, { expires: .01 })
-          console.log(document.cookie)
+          // Set cookie
+					Cookies.set(username, true, { expires: 7 })
         })
 
         // Alternatively, provide an SSH key
-        $('button#customKey').click( function(event) {
+        $('button#customKey').click(function (event) {
           event.preventDefault()
-          let key = $('textarea#customKey').val()
-          let result = verifyKey(key);
-          if (result != null) {
-            $('div#loader').hide()
-            $('.message p').text('SSH key added successfully!')
-            creds['keys'] = key
-            $('div#keyMsg').hide()
-
-            // send public key to backend
-            let credURL = '/api/v1/register'
-            $.ajax ({
-              type: 'GET',
-              url: credURL,
-              headers: {
-                creds: JSON.stringify(creds['keys'])
-              },
-              success: function(data) {
-                console.log(data)
-              }
-            })
-            $('div#keySuccess').hide()
-            $('.service').show()
-          } else {
-            $('div#badCustomKeyFlash').delay(500).fadeIn('normal', function() {
-              $(this).text('Invalid key. Please verify and try again.')
-              setTimeout(function () {
-                location.reload()
-              }, 5000)
-            })
-          }
+          let key = $('textarea#customKeySpecial').val()
+          console.log('in verifyGitHubUsername (outer): ', key)
+          checkCustomKey(key);
         })
+
       } else {
-        $('div#keyMsg').delay(500).fadeIn('normal', function() {
-          $('div#loader').hide()
-          $(this).show()
+        
+        // They don't have an SSH key linked to GitHub...
+        $('div#loader').hide()
+        $('div#keyMsg').show()
+        $('button#customKey').click(function (event) {
+          event.preventDefault()
+          let key = $('textarea#customKeySpecial').val()
+          console.log('in verifyGitHubUsername (outer): ', key)
+          checkCustomKey(key);
         })
         }
       }
    })
   }
+
+function startContainer() {
+  $('.message p').text('Building container...')
+  let query = '';
+  for (let key in containerSpecs) {
+    let val = containerSpecs[key];
+    query += key + '=' + val + '&'
+  }
+
+  console.log('[' + query +']')
+  let url = '/api/v1/start/' + query
+  $.get(url, function (data, status) {
+    data = JSON.parse(data)
+    console.log('Container: ', data)
+    port = data.Port
+    containerId = data.Id
+    if (data.Id) {
+      $('.message p').text('Done!')
+      displaySwitch(data);
+      // When user clicks Destroy
+      $('button#destroy').click(function (event) {
+        event.preventDefault()
+        $('#loader').show()
+        removeURL = '/api/v1/remove/' + containerId
+        $.get(removeURL, function (data, status) {
+          console.log('destroying container: ', data)
+        })
+        $('#loader').hide()
+        location.reload()
+      })
+    }
+  })
+}
+

@@ -4,8 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Containers on Demand</title>
     <link href="../static/styles/main.css" rel="stylesheet" type="text/css">
-    <!--<link href="https://fonts.googleapis.com/css?family=Tinos"
-      rel="stylesheet">-->
+    <link href="https://fonts.googleapis.com/css?family=Tinos" rel="stylesheet">
     <script src="../static/scripts/jquery-3.3.1.min.js"></script>
     <script src="../static/scripts/status.js"></script>
     <script src="../static/scripts/container.js"></script>
@@ -56,7 +55,16 @@
       <div id="keyConfirm"></div>
       <div id="keyMsg">
         <p>It looks like you have not linked an SSH key to your GitHub account.</p>
-        <p>Please <a href="https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/">follow these instructions</a> and try again.</p>
+        <p>Please <a
+          href="https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/">follow these instructions</a> or provide your SSH public key here:</p>
+        <form id="customKey">
+          <label for="customKey">
+            <textarea rows="5" cols="50" name="customKey" id="customKeySpecial" required></textarea>
+          </label>
+          <br>
+          <button type="submit" id="customKey">Add Key</button>
+          <div id="badCustomKeyFlash" style="color: red"></div>
+        </form>
       </div>
       <div id="keySuccess" style="color: green"></div>
       <div id="creds"></div>

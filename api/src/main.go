@@ -201,6 +201,9 @@ func addKey(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
+  cmd := exec.Command("service", "sshd", "restart")
+  err = cmd.Run()
+  log.Printf("Restarted sshd: [%v]\n", err)
 	log.Printf("Added key to %s\n", path)
 
 	json.NewEncoder(w).Encode("OK")

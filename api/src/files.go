@@ -36,7 +36,7 @@ func makeDockerfile(base string, cloneURL string, repoId string) string {
 	}
 
 	var gitClone bytes.Buffer
-	gitClone.WriteString("RUN git clone " + cloneURL + "\n")
+	gitClone.WriteString("RUN git clone " + cloneURL + " && cd /\n")
 	_, writeErr := tmp.Write(gitClone.Bytes())
 	if writeErr != nil {
 		panic(writeErr)

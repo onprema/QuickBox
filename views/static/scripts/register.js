@@ -11,7 +11,7 @@ $(document).ready(function () {
     for (let i = 0; i < invalidChars.length; i++) {
       if (username.includes(invalidChars[i])) {
         $('div#loader').hide();
-        $('.message p').text('Invalid GitHub username. Please try again.');
+        $('.message p').html('<style="color:red">Invalid GitHub username. Please try again.</style>');
         $('.register').show();
       }
     }

@@ -68,11 +68,16 @@ p {
 .header a {
   text-decoration: none;
   color: #000000;
+  font-size: 1.5em;
   text-shadow: 2px 2px #40e0d0;
 }
 
+.header h1 {
+  color: red;
+}
+
 #start {
-  font-size: 1.5em;
+  font-size: 1.25em;
 }
 
 .running-container {

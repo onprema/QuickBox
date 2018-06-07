@@ -1,27 +1,26 @@
-let creds = {}
 $(document).ready(function () {
   // Hide service until users are verified
-  $('.service').hide()
+  $('.service').hide();
 
   // Username submit click
   $('button#username').click(function (event) {
     event.preventDefault();
-    $('.message p').text('Verifying GitHub username...')
-    let username = $('input#username').val()
-    let invalidChars = ['!', '@', '$', '%', '^', '&', '*', '(', ')']
+    $('.message p').text('Verifying GitHub username...');
+    let username = $('input#username').val();
+    let invalidChars = ['!', '@', '$', '%', '^', '&', '*', '(', ')'];
     for (let i = 0; i < invalidChars.length; i++) {
       if (username.includes(invalidChars[i])) {
-        $('div#loader').hide()
-        $('.message p').text('Invalid GitHub username. Please try again.')
-        $('.register').show()
+        $('div#loader').hide();
+        $('.message p').text('Invalid GitHub username. Please try again.');
+        $('.register').show();
       }
     }
     if (document.cookie.search(username) > -1 && username !== '') {
-          $('.service').show()
-          $('.message p').text('Welcome, ' + username + '!')
+      $('.service').show();
+      $('.message p').text('Welcome, ' + username + '!');
     } else {
       verifyGithubUsername();
     }
-    $('.register').hide()
-  })
-})
+    $('.register').hide();
+  });
+});

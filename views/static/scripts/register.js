@@ -5,6 +5,7 @@ $(document).ready(function () {
   // Username submit click
   $('button#username').click(function (event) {
     event.preventDefault();
+    $('div#loader').show()
     $('.message p').text('Verifying GitHub username...');
     let username = $('input#username').val();
     let invalidChars = ['!', '@', '$', '%', '^', '&', '*', '(', ')'];

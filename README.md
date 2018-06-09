@@ -1,4 +1,4 @@
-![QuickBox Screenshot](https://preview.ibb.co/gviNv8/qbee.png)
+![QuickBox Screenshot](https://image.ibb.co/dZZy58/qq.png)
 
 
 QuickBox is a web application that allows users to connect to a Linux

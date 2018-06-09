@@ -1,123 +1,71 @@
 <!DOCTYPE HTML>
 <html>
+
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>QuickBox: Spin up a contained Linux environment in seconds.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="../static/styles/main.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Tinos" rel="stylesheet">
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
     <script src="../static/scripts/jquery-3.3.1.min.js"></script>
-    <script src="../static/scripts/container.js"></script>
-    <script src="../static/scripts/display.js"></script>
-    <script src="../static/scripts/register.js"></script>
+    <script src="../static/scripts/service.js"></script>
     <script src="../static/scripts/functions.js"></script>
-    <script src="../static/scripts/cookie.js"></script>
   </head>
+
   <body>
-    <div class="container">
+
+    <div class="wrapper">
+
+      <!-- HEADER BEGIN -->
       <div class="header">
         <h1><a href="/">QuickBox</a></h1>
         <div class="message">
           <p>Spin up a contained Linux environment in seconds.</p>
         </div>
       </div>
+      <!-- HEADER END -->
 
-      <!-- REGISTRATION  -->
+      <div id="loader"></div>
 
-      <div class="register">
-        <form id="registration">
-          <p>To get started, enter your GitHub username.</p>
-          <input type="text" name="username" id="username" data-key="username">
-          <button type="button" id="username" value="Submit">Let's go!</button>
-        </form>
-      </div>
-
-
-      <div id="userFlash">Invalid GitHub username. Please try again.</div>
-      <div id="keyMsgSuccess">
-        <p>It looks like you have an SSH public key linked to your GitHub 
-           account. Would you like to use this key?
-        </p>
-        <form id="keyConfirm">
-        <button type="button" id="keyConfirmYes">Yes</button>
-        <br>
-        <p>Alternatively, you can provide your SSH public key here:</p>
-        <form id="customKey">
-          <label for="customKey">
-            <textarea rows="5" cols="50" name="customKey" id="customKey" required></textarea>
-          </label>
-          <br>
-          <button type="submit" id="customKey">Add Key</button>
-          <div id="badCustomKeyFlash" style="color: red"></div>
-        </form>
-      </div>
-      <div id="keyConfirm"></div>
-      <div id="keyMsg">
-        <p>It looks like you have not linked an SSH key to your GitHub account.</p>
-        <p>Please <a
-          href="https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/">follow these instructions</a> or provide your SSH public key here:</p>
-        <form id="customKey">
-          <label for="customKey">
-            <textarea rows="5" cols="50" name="customKey" id="customKeySpecial" required></textarea>
-          </label>
-          <br>
-          <button type="submit" id="customKey">Add Key</button>
-          <div id="badCustomKeyFlash" style="color: red"></div>
-        </form>
-      </div>
-      <div id="keySuccess" style="color: green"></div>
-      <div id="creds"></div>
-
-      <!-- SERVICE  -->
-
+      <!-- SERVICE BEGIN -->
       <div class="service">
-        <div id="loader"></div>
-        <div class="destroying"></div>
         <div class="select-container">
-        <p>Select a base image</p>
-        <div id="baseFlash">Please select a base image.</div>
-        <form id="input">
-          <div class="bases">
-            <input type="radio" name="base" id="base" data-key="base" 
-            data-val="cod-ubuntu:14.04" checked="checked">
-            Ubuntu:14.04
-            <!--
-            <input type="radio" name="base" id="base" data-key="base" 
-            data-val="cod-centos:6">
-            CentOS:6
-            -->
-          </div>
-
-          <div class="github">
-            <p>Import your code (optional)</p>
-            <div id="repoSuccess">GitHub repo added. Click 'start'.</div>
-            <input type="text" name="repo" id="repo-input"
-            placeholder="ex: https://github.com/username/repository" size=40>
-            <div id="repoFlash">Invalid GitHub repository. Please try again.</div>
-            <br>
-          </div>
-          <input type="submit" id="start" value="Start">
-        </form>
+          <p>Select a distribution:</p>
+          <form id="input">
+            <div class="bases">
+              <input type="radio" name="base" id="base" data-key="base" 
+              data-val="qb-ubuntu:14.04" checked="checked">
+              Ubuntu 14.04
+            </div>
+            <div class="github">
+              <p>Import a repository (optional)</p>
+              <input type="text" name="repo" id="repo-input"
+              placeholder="ex: https://github.com/username/repository" size=40>
+              <br>
+            </div>
+            <input type="submit" id="start" class="button" value="Start">
+          </form>
         </div>
-        </div>
+      </div>
 
       <div class="running-container">
         <p>Access your container with the following command:</p>
         <pre class="cmd"></pre>
-	<p>password: root</p>
+        <p>password: root</p>
         <ul id="running-container"></ul>
       </div>
+      <!-- SERVICE END -->
 
-      <!-- FOOTER 
-
-      <div class="nav">
-        <ul>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Report a Bug</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
+      <!-- FOOTER BEGIN -->
+      <div class="footer">
+        <p>Created and maintained by <a href="https://github.com/eightlimbed">
+          Lee Gaines</a>. Please report issues 
+        <a href="https://github.com/eightlimbed/QuickBox/issues">here</a>.</p>
       </div>
-      -->
+      <!-- FOOTER END -->
+
     </div>
+
   </body>
+
 </html>

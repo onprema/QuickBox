@@ -1,13 +1,34 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  max-height: 600px;
+  margin: auto;
+  align-items: center;
+  text-align: center;
+}
+
+.header a {
+  font-family: 'Tinos', serif;
+  text-decoration: none;
+  color: #000000;
+  font-size: 1.5em;
+  text-shadow: 2px 2px #40e0d0;
+}
+
+.message {
+  font-family: 'Tinos', serif;
+  font-size: 1.15em;
+  margin: 0;
+}
+
 p {
   font-family: 'Tinos', serif;
   color: #111111;
 }
 
-.os {
-  display: flex;
-  width: 420px;
-  border: 1px solid red;
-  padding: 20px;
+.service {
+  background-color: #EEE;
 }
 
 .github {
@@ -17,67 +38,24 @@ p {
   padding: 15px;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  max-width: 800px;
-  margin: auto;
-  padding: 0;
-  align-items: center;
-  text-align: center;
-}
-
 .bases {
   width: 420px;
 }
 
-.nav {
+.footer {
   display: flex;
   text-align: center;
-  padding: 20px;
-  margin-top: 200px;
 }
 
-.nav ul {
-  list-style-type: none;
-  text-align: center;
-}
-
-.nav li {
-  margin-right: 10px;
-  margin-left: 10px;
-  display: inline;
-}
-
-.message {
-  font-family: 'Tinos', serif;
-  font-size: 1.15em;
-  margin: 0;
-}
-
-.register {
-  padding: 10px;
-  text-align: center;
-}
-
-.header {
-  text-align: center;
-  font-family: 'Tinos', serif;
-}
-
-.header a {
+.footer a {
   text-decoration: none;
+  text-shadow: 1px 1px #40e0d0;
   color: #000000;
-  font-size: 1.5em;
-  text-shadow: 2px 2px #40e0d0;
 }
 
-.header h1 {
-  color: red;
-}
-
-#start {
-  font-size: 1.25em;
+.button {
+  font-size: 1.15em;
+  padding: 5px 20px;
 }
 
 .running-container {
@@ -89,67 +67,27 @@ p {
   padding-bottom: 20px;
 }
 
-#baseFlash {
-  display: none;
-  color: #FF0000;
-}
-
 .cmd {
   background-color: black;
   color: white;
   padding: 10px;
 }
 
-#repoFlash {
-  display: none;
-  color: #FF0000;
-}
-
-#repoSuccess {
-  display: none;
-  background-color: darkgreen;
-  color: #ffffff;
-}
-
-#userFlash {
-  display: none;
-}
-
-#keyMsg {
-  display: none;
-}
-
-.service {
-  display: none;
-}
-
-#keyMsgSuccess {
-  display: none;
-}
-
-#userSuccess {
-  display: none;
-  color: #000000;
-}
-
-#username {
-  color: #000000;
-}
-
 #loader {
+  display: none;
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 40%;
   z-index: 1;
-  width: 150px;
-  height: 150px;
+  width: 40px;
+  height: 40px;
   margin: -75px 0 0 -75px;
-  border: 16px solid #f3f3f3;
+  border: 16px solid #000000;
   border-radius: 50%;
-  border-top: 16px solid #3498db;
-  width: 120px;
-  height: 120px;
-  -webkit-animation: spin 2s linear infinite;
+  border-top: 16px solid #40e0d0;
+  width: 100px;
+  height: 100px;
+  -webkit-animation: spin 10s linear infinite;
   animation: spin 2s linear infinite;
 }
 
@@ -162,25 +100,3 @@ p {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-
-.animate-bottom {
-  position: relative;
-  -webkit-animation-name: animatebottom;
-  -webkit-animation-duration: 1s;
-  animation-name: animatebottom;
-  animation-duration: 1s
-}
-
-@-webkit-keyframes animatebottom {
-  from { bottom:-100px; opacity:0 } 
-  to { bottom:0px; opacity:1 }
-}
-
-@keyframes animatebottom { 
-  from{ bottom:-100px; opacity:0 } 
-  to{ bottom:0; opacity:1 }
-}
-
-#loader {
-  display: none;
-  text-align: center;

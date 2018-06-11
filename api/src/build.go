@@ -31,7 +31,7 @@ func (b *Builder) buildImage(path string, repoId string) {
 	b.waiting = true
 	go func() {
 		for b.waiting {
-			log.Printf("%v is building...\n", b.specs["name"])
+			log.Printf("%v is building...\n", b.specs["pw"])
 			time.Sleep(time.Second * 3)
 		}
 	}()

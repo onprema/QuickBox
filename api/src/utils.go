@@ -12,7 +12,7 @@ import (
 var deadImage string
 
 // Creates a dockerfile for users who want to import a repository
-func makeDockerfile(base string, cloneURL string, repoId string) string {
+func makeDockerfile(base string, cloneURL string, repoId string, pw string) string {
 
 	cloneURL = strings.Replace(cloneURL, "|", "/", -1)
 	dockerFile := "../../builds/" + base + "/Dockerfile"
@@ -36,11 +36,22 @@ func makeDockerfile(base string, cloneURL string, repoId string) string {
 		panic(err)
 	}
 
-	var gitClone bytes.Buffer
-	gitClone.WriteString("RUN git clone " + cloneURL + " && cd /\n")
-	_, writeErr := tmp.Write(gitClone.Bytes())
-	if writeErr != nil {
-		panic(writeErr)
+	// Add repo to dockerfile if they provided one
+	if cloneURL != "tmp" {
+		var gitClone bytes.Buffer
+		gitClone.WriteString("RUN git clone " + cloneURL + " && cd /\n")
+		_, cloneWriteErr := tmp.Write(gitClone.Bytes())
+		if cloneWriteErr != nil {
+			panic(cloneWriteErr)
+		}
+	}
+
+	// Change root pw
+	var rootPW bytes.Buffer
+	rootPW.WriteString("RUN echo \"root:" + pw + "\" | chpasswd\n")
+	_, pwWriteErr := tmp.Write(rootPW.Bytes())
+	if pwWriteErr != nil {
+		panic(pwWriteErr)
 	}
 
 	log.Printf("Dockerfile created: [%s]\n", tmpDockerfile)

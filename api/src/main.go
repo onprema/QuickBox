@@ -41,7 +41,6 @@ func main() {
 	}
 }
 
-
 // Check the status of the app
 func statusCheck(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode("OK")

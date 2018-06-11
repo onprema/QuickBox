@@ -1,3 +1,13 @@
+// Makes hash for root password
+function hash() {
+  let hash = '';
+  let range = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  for (let i = 0; i < 16; i++) {
+    hash += range.charAt(Math.floor(Math.random() * range.length))
+  }
+  return hash;
+}
+
 function startContainer () {
   $('.message p').text('Building container...');
   let query = '';
@@ -31,6 +41,7 @@ function displaySwitch (data) {
   $('#loader').hide();
   $('.running-container').show();
   $('.cmd').append('ssh root@138.68.8.138 -p ' + String(data.Port));
+  $('.pw').append('<p>Password: <strong>' + String(data.Password) + '</strong></p>')
   $('.running-container').append('<button id="destroy">Destroy</button>');
   $('.running-container').append('<p><span style="color: maroon">This container will automatically be destroyed in 12 hours.</p></span>');
   $('.footer').show()

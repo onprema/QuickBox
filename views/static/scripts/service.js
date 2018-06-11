@@ -18,6 +18,9 @@ $(document).ready(function () {
     containerSpecs['base'] = 'qb-ubuntu:14.04';
   }
 
+  // Add random root password
+  containerSpecs['pw'] = hash();
+
   // Make a GET request to send container specs to API when 'Start' is clicked
   $('input#start').click(function (event) {
     event.preventDefault();

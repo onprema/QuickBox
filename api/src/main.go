@@ -30,7 +30,7 @@ func main() {
 			for {
 				dead := killContainers()
 				log.Printf("Killed %v containers\n", dead)
-				time.Sleep(time.Minute * 10)
+				time.Sleep(time.Minute * 1)
 			}
 		}()
 

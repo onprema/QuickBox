@@ -17,6 +17,10 @@ function startContainer () {
   }
   let url = '/api/v1/start/' + query;
   $.get(url, function (data, status) {
+    if data.Id === undefined {
+        alert('invalid request');
+        return;
+    }
     data = JSON.parse(data);
     port = data.Port;
     containerId = data.Id;
@@ -43,6 +47,6 @@ function displaySwitch (data) {
   $('.cmd').append('ssh root@138.68.8.138 -p ' + String(data.Port));
   $('.pw').append('<p>Password: <strong>' + String(data.Password) + '</strong></p>')
   $('.running-container').append('<button id="destroy">Destroy</button>');
-  $('.running-container').append('<p><span style="color: maroon">This container will automatically be destroyed in 12 hours.</p></span>');
+  $('.running-container').append('<p><span style="color: maroon">This container will automatically be destroyed in 5 minutes.</p></span>');
   $('.footer').show()
 }

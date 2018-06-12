@@ -47,6 +47,10 @@ func runContainer(w http.ResponseWriter, r *http.Request) {
 	builder.mux.Lock()
 	defer builder.mux.Unlock()
 	path := makeDockerfile(base, cloneURL, repoId, pw)
+	if path == "err" {
+		json.NewEncoder(w).Encode("error")
+		return
+	}
 	builder.buildImage(path, repoId)
 	deadImage = repoId // deadImage is located in files.go.
 

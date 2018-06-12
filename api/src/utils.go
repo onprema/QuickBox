@@ -38,6 +38,7 @@ func makeDockerfile(base string, cloneURL string, repoId string, pw string) stri
 
 	// Add repo to dockerfile if they provided one
 	if cloneURL != "tmp" {
+		if strings.Contains(cloneURL, "\n") { return "err" }
 		var gitClone bytes.Buffer
 		gitClone.WriteString("RUN git clone " + cloneURL + " && cd /\n")
 		_, cloneWriteErr := tmp.Write(gitClone.Bytes())
@@ -71,7 +72,7 @@ func killContainers() int {
 		for i := 0; i < len(containers); i++ {
 			timeString := strings.Split(strings.Trim(containers[i], "\" "), " ")
 			containerID := timeString[0]
-			if timeString[1] == "12" && timeString[2] == "hours" {
+			if timeString[1] == "5" && timeString[2] == "minutes" {
 				cmd := exec.Command("docker", "container", "rm", "-f", containerID)
 				err := cmd.Run()
 				if err != nil {

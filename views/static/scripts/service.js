@@ -37,7 +37,7 @@ $(document).ready(function () {
       if (val.slice(-4) == '.git') { val = val.slice(0, -4) };
 
       // Prevent any modifications of Dockerfile from an injection
-      if (val.includes('\n') { 
+      if (val.includes('\n')) { 
             $('#loader').hide();
             $('.service').show();
             $('.footer').show();

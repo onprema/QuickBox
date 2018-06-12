@@ -36,6 +36,14 @@ $(document).ready(function () {
       if (val[val.length-1] == '/') { val = val.slice(0, -1) };
       if (val.slice(-4) == '.git') { val = val.slice(0, -4) };
 
+      // Prevent any modifications of Dockerfile from an injection
+      if (val.includes('\n') { 
+            $('#loader').hide();
+            $('.service').show();
+            $('.footer').show();
+            $('.message p').html('<p style="color: red">Invalid GitHub repository.</p>')
+      }
+
       $('.message p').text('Validating repository...')
 
       let len = 'https://github.com/'.length;
